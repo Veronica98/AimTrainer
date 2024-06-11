@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,16 @@ public class CustomizeCrosshair : MonoBehaviour
     [SerializeField] private RectTransform Center, Top, Bottom, Right, Left;
     [SerializeField] private RawImage riCenter, riTop, riBottom, riRight, riLeft;
     [SerializeField] public GameSettings gameSettings;
-
+    [SerializeField] TMP_Dropdown crosshairColorSelector;
     [SerializeField] Toggle centerToggle;
-    [SerializeField] Slider centerThicknessSlider, thicknessSlider, verticalValueSlider, horizontalValueSlider, gapSlider; 
-
+    [SerializeField] Slider centerThicknessSlider, thicknessSlider, verticalValueSlider, horizontalValueSlider, gapSlider;
+    Dictionary<int, List<float>> colorOptions = new Dictionary<int, List<float>> { 
+                                                { 0, new List<float> { 255f, 0f, 0f } }, 
+                                                { 1, new List<float> { 100f, 0f, 200f } }, 
+                                                { 2, new List<float> { 255f, 255f, 0f} }, 
+                                                { 3, new List<float> { 0f, 255f, 0f } }, 
+                                                { 4, new List<float> { 0f, 0f, 0f } } };
+        
     void Start()
     {
         gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
@@ -21,6 +28,7 @@ public class CustomizeCrosshair : MonoBehaviour
         verticalValueSlider.value = gameSettings.verticalCrosshairValue;
         horizontalValueSlider.value = gameSettings.horizontalCrosshairValue;
         gapSlider.value = gameSettings.gap;
+        crosshairColorSelector.value = gameSettings.crosshairColor;
     }
     public void EnableCenter()
     {
@@ -39,6 +47,15 @@ public class CustomizeCrosshair : MonoBehaviour
     {
         Center.sizeDelta = new Vector2(centerThicknessSlider.value, centerThicknessSlider.value);
         gameSettings.centerThickness = centerThicknessSlider.value;
+        if (gameSettings.centerThickness > 0)
+        {
+            centerToggle.isOn = true;
+        }
+        else
+        {
+            centerToggle.isOn = false;
+        }
+        gameSettings.showCrosshairCenter = centerToggle.isOn;
     }
 
     public void Thickness()
@@ -66,39 +83,20 @@ public class CustomizeCrosshair : MonoBehaviour
 
     public void Gap()
     {
-        Top.anchoredPosition = new Vector3(0f, gapSlider.value, 0f);
-        Bottom.anchoredPosition = new Vector3(0f, -gapSlider.value, 0f);
-        Left.anchoredPosition = new Vector3(gapSlider.value, 0f, 0f);
-        Right.anchoredPosition = new Vector3(-gapSlider.value, 0f, 0f);
+        Top.anchoredPosition = new Vector2(0f, gapSlider.value);
+        Bottom.anchoredPosition = new Vector2(0f, -gapSlider.value);
+        Left.anchoredPosition = new Vector2(gapSlider.value, 0f);
+        Right.anchoredPosition = new Vector2(-gapSlider.value, 0f);
         gameSettings.gap = gapSlider.value;
     }
 
-    /*public void CustomiseCrosshair()
+
+    public void SetCrosshairColor()
     {
-        if (showCrosshairCenter == true)
-        {
-            Center.sizeDelta = new Vector2(centerThickness, centerCrosshairValue);
-        }
-        else
-        {
-            Center.sizeDelta = new Vector2(0, 0);
-        };
-
-        Top.sizeDelta = new Vector2(thickness, topCrosshairValue);
-        Bottom.sizeDelta = new Vector2(thickness, bottomCrosshairValue);
-        Left.sizeDelta = new Vector2(leftCrosshairValue, thickness);
-        Right.sizeDelta = new Vector2(rightCrosshairValue, thickness);
-
-        Top.anchoredPosition = new Vector3(0f, gap, 0f);
-        Bottom.anchoredPosition = new Vector3(0f, -gap, 0f);
-        Left.anchoredPosition = new Vector3(-gap, 0f, 0f);
-        Right.anchoredPosition = new Vector3(gap, 0f, 0f);
-
-        riCenter.color = riTop.color = riBottom.color = riRight.color = riLeft.color = Color.green;
-    }*/
-    
-    void Update()
-    {
-       
+        riCenter.color = riTop.color = riBottom.color = riRight.color = riLeft.color = new Color(colorOptions[crosshairColorSelector.value][0], 
+                                                                                            colorOptions[crosshairColorSelector.value][1], 
+                                                                                            colorOptions[crosshairColorSelector.value][2]);
+        gameSettings.crosshairColor = crosshairColorSelector.value;
     }
+
 }

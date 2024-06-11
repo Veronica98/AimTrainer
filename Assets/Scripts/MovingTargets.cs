@@ -26,3 +26,4 @@ public class MovingTargets : MonoBehaviour
         direction *= -1;
     }
 }
+

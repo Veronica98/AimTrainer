@@ -13,8 +13,9 @@ public class Menu : MonoBehaviour
         gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
         gameSettings.isMoving = false;
         gameSettings.isDecreasing = true;
+        gameSettings.isPrecision = false;
         gameSettings.noOfTargets = 4;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); //in build jocul in sine are idx 1
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void LoadTrackingGameMode()
@@ -22,6 +23,7 @@ public class Menu : MonoBehaviour
         gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
         gameSettings.isMoving = true;
         gameSettings.isDecreasing = false;
+        gameSettings.isPrecision = false;
         gameSettings.noOfTargets = 3;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -31,7 +33,18 @@ public class Menu : MonoBehaviour
         gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
         gameSettings.isMoving = false;
         gameSettings.isDecreasing = false;
+        gameSettings.isPrecision = false;
         gameSettings.noOfTargets = 3;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void LoadPrecisionGameMode()
+    {
+        gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
+        gameSettings.isMoving = false;
+        gameSettings.isDecreasing = false;
+        gameSettings.isPrecision = true;
+        gameSettings.noOfTargets = 8;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 

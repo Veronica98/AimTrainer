@@ -8,19 +8,25 @@ public class SettingsController : MonoBehaviour
 {
     public GameSettings gameSettings;
     public GameObject MainMenuUI, SettingsUI;
-    [SerializeField] Slider mouseSensitivitySlider;
+    [SerializeField] Slider mouseSensitivitySlider, volumeSlider;
     private static readonly string encryptionKey = "1926348";
 
     void Start()
     {
         gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
         mouseSensitivitySlider.value = gameSettings.mouseSensitivity;
+        volumeSlider.value = gameSettings.volumeValue;
     }
 
     public void SetMouseSensitivity()
     {
         
         gameSettings.mouseSensitivity = mouseSensitivitySlider.value;
+    }
+    
+    public void SetSoundVolume()
+    {
+        gameSettings.volumeValue = volumeSlider.value;
     }
 
     public void SaveSettings()

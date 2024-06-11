@@ -23,16 +23,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform CentralWall;
     public GameSettings GameSettings;
 
-
-
-
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
         GameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
+        audioSource.volume = GameSettings.volumeValue;
         Cursor.lockState = CursorLockMode.Locked;
         cameraTransform = GameObject.Find("Main Camera").transform;
-        cameraTransform.LookAt(CentralWall);
         mouseCamera = Camera.main;
         targetScript = GameObject.Find("TargetSpawner");
         TargetSpawner = targetScript.GetComponent<GenerateTargets>();
@@ -40,17 +37,17 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float playerCameraX = Input.GetAxis("Mouse X") * GameSettings.mouseSensitivity * Time.deltaTime;
-        float playerCameraY = Input.GetAxis("Mouse Y") * GameSettings.mouseSensitivity * Time.deltaTime;
+        var isPaused = Time.timeScale > 0 ? 1 : 0;
+        float playerCameraX = Input.GetAxis("Mouse X") * GameSettings.mouseSensitivity * 0.001f * isPaused;
+        float playerCameraY = Input.GetAxis("Mouse Y") * GameSettings.mouseSensitivity * 0.001f * isPaused;
 
         body.Rotate(Vector3.up * playerCameraX);
         xRotation -= playerCameraY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
         cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
         Vector3 movementDirection = transform.right * horizontalInput + transform.forward * verticalInput;
         characterController.Move(movementDirection * movementSpeed * Time.deltaTime);
@@ -87,6 +84,15 @@ public class PlayerController : MonoBehaviour
                     GameSettings.score += 100;
                     GameSettings.targetsHit++;
                     TargetSpawner.GenerateDecreasingTargets(1);
+                }
+                else if(hit.collider.gameObject.CompareTag("PrecisionTarget"))
+                {
+                    Object.Destroy(hit.collider.gameObject);
+                    audioSource.Play();
+                    GameSettings.noOfTargets++;
+                    GameSettings.score += 100;
+                    GameSettings.targetsHit++;
+                    TargetSpawner.GeneratePrecisionTargets(1);
                 }
                 else 
                 {

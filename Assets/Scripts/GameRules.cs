@@ -42,7 +42,6 @@ public class GameRules : MonoBehaviour
             {
                 gameTimer -= Time.deltaTime;
                 DisplayTime(gameTimer);
-                //calculate score function
             }
             else
             {

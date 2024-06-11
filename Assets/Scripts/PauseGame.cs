@@ -15,7 +15,6 @@ public class PauseGame : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         PauseMenu.SetActive(false);
-        //GameUI.SetActive(true);
         isPaused = false;
         Time.timeScale = 1f;
     }
@@ -23,7 +22,6 @@ public class PauseGame : MonoBehaviour
     public void Restart()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        //gameSettings = GameObject.Find("GameSettings").GetComponent<GameSettings>();
         gameSettings.score = gameSettings.missedShots = gameSettings.targetsHit = 0;
         gameSettings.accuracy = 100;
         gameSettings.noOfTargets = noOfTargetsOnCurrentGameMode;
@@ -34,7 +32,7 @@ public class PauseGame : MonoBehaviour
     {
         gameSettings.score = gameSettings.missedShots = gameSettings.targetsHit = 0;
         gameSettings.accuracy = 100;
-        SceneManager.LoadScene(0); // 0 - index main menu
+        SceneManager.LoadScene(0);
     }
 
     private void Start()
@@ -60,7 +58,6 @@ public class PauseGame : MonoBehaviour
             {
                 Cursor.lockState = CursorLockMode.None;
                 PauseMenu.SetActive(true);
-                //GameUI.SetActive(false);
                 isPaused = true;
                 Time.timeScale = 0f;
             }
